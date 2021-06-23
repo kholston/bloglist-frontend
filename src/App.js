@@ -79,11 +79,29 @@ const App = () => {
   const createBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     try {
-      const savedBlog = await blogService.create({blogObject})
+      const savedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(savedBlog))
       const message = `a new blog ${savedBlog.title} by ${savedBlog.author} added`
       createNotification(message, 1)
       
+    } catch (error) {
+      createNotification(error.message, 2)
+    }
+  }
+
+  const updateBlog = async (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    const changedBlog = {
+      user: blog.user,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+
+    try {
+      const updatedBlog = await blogService.update(id, changedBlog)
+      setBlogs(blogs.map( blog => blog.id !== id ? blog : updatedBlog))
     } catch (error) {
       createNotification(error.message, 2)
     }
@@ -109,7 +127,7 @@ const App = () => {
         </Togglable>
         <div>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
           )}
         </div>
       </div>
