@@ -124,26 +124,33 @@ const App = () => {
       <h2>blogs</h2>
       <Notification message={notificationMessage} notificationType={notificationType} />
       
-          {user === null ?
-      <LoginForm 
-        username={username}
-        handleUsernameChange={handleUsernameChange}
-        password={password}
-        handlePasswordChange={handlePasswordChange}
-        handlelogin={handleLogin}
-      />  :
+      {user === null ?
+        <LoginForm 
+          username={username}
+          handleUsernameChange={handleUsernameChange}
+          password={password}
+          handlePasswordChange={handlePasswordChange}
+          handlelogin={handleLogin}
+        />  :
       <div>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
         <Togglable buttonLabel='create new blog' ref={blogFormRef}>
           <BlogForm createBlog={createBlog}/>
         </Togglable>
-        <div>
-          {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog}/>
-          )}
-        </div>
       </div>
-    }
+      }
+
+      <div>
+        {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+          <Blog 
+            key={blog.id} 
+            blog={blog} 
+            updateBlog={updateBlog} 
+            deleteBlog={deleteBlog}
+            showRemoveButton={user && user.name === blog.user.name}
+          />
+        )}
+      </div>
     </div>
   )
 }
