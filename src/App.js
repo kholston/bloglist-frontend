@@ -10,13 +10,12 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState(0)
 
 
   const blogFormRef = useRef()
+  const loginFormRef = useRef()
   
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -42,33 +41,21 @@ const App = () => {
     }, 5000)
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (loginObject) => {
+    loginFormRef.current.toggleVisibility()
 
     try { 
-      const user = await loginService.login({
-        username, password
-      })
-
+      const user = await loginService.login(loginObject)
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (error) {
       const errorMessage = 'wrong username or password'
       createNotification(errorMessage, 2)
     }
   }
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value)
-  }
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-  }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBloglistUser')
@@ -119,19 +106,17 @@ const App = () => {
     }
   }
 
+
   return (
     <div>
       <h2>blogs</h2>
       <Notification message={notificationMessage} notificationType={notificationType} />
       
       {user === null ?
-        <LoginForm 
-          username={username}
-          handleUsernameChange={handleUsernameChange}
-          password={password}
-          handlePasswordChange={handlePasswordChange}
-          handlelogin={handleLogin}
-        />  :
+        <Togglable buttonLabel={'log in'} ref={loginFormRef}>
+          <LoginForm handleLogin={handleLogin}/>
+        </Togglable>
+      :
       <div>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
         <Togglable buttonLabel='create new blog' ref={blogFormRef}>
@@ -147,7 +132,7 @@ const App = () => {
             blog={blog} 
             updateBlog={updateBlog} 
             deleteBlog={deleteBlog}
-            showRemoveButton={user && user.name === blog.user.name}
+            showRemoveButton={!user ?  false: user.name === blog.user.name ?  true: false}
           />
         )}
       </div>
