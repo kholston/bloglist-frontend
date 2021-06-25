@@ -16,11 +16,11 @@ const App = () => {
 
   const blogFormRef = useRef()
   const loginFormRef = useRef()
-  
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const App = () => {
   const createNotification = (message, type) => {
     setNotificationMessage(message)
     setNotificationType(type)
-    setTimeout(()=>{
+    setTimeout(() => {
       setNotificationMessage(null)
       setNotificationType(0)
     }, 5000)
@@ -44,7 +44,7 @@ const App = () => {
   const handleLogin = async (loginObject) => {
     loginFormRef.current.toggleVisibility()
 
-    try { 
+    try {
       const user = await loginService.login(loginObject)
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
@@ -70,7 +70,7 @@ const App = () => {
       setBlogs(blogs.concat(savedBlog))
       const message = `a new blog ${savedBlog.title} by ${savedBlog.author} added`
       createNotification(message, 1)
-      
+
     } catch (error) {
       createNotification(error.message, 2)
     }
@@ -111,26 +111,26 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={notificationMessage} notificationType={notificationType} />
-      
+
       {user === null ?
         <Togglable buttonLabel={'log in'} ref={loginFormRef}>
           <LoginForm handleLogin={handleLogin}/>
         </Togglable>
-      :
-      <div>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-        <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-          <BlogForm createBlog={createBlog}/>
-        </Togglable>
-      </div>
+        :
+        <div>
+          {user.name} logged in <button onClick={handleLogout}>logout</button>
+          <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+            <BlogForm createBlog={createBlog}/>
+          </Togglable>
+        </div>
       }
 
       <div>
         {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-          <Blog 
-            key={blog.id} 
-            blog={blog} 
-            updateBlog={updateBlog} 
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
             deleteBlog={deleteBlog}
             showRemoveButton={!user ?  false: user.name === blog.user.name ?  true: false}
           />

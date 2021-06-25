@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const LoginForm = ({handleLogin}) => {
+const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -16,7 +16,7 @@ const LoginForm = ({handleLogin}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    handleLogin({username, password})
+    handleLogin({ username, password })
     setUsername('')
     setPassword('')
   }
@@ -27,8 +27,8 @@ const LoginForm = ({handleLogin}) => {
       <form onSubmit={handleSubmit}>
         <div>
           username
-          <input 
-            type="text" 
+          <input
+            type="text"
             value={username}
             name='Username'
             onChange={handleUsernameChange}
@@ -36,11 +36,11 @@ const LoginForm = ({handleLogin}) => {
         </div>
         <div>
           password
-          <input 
-            type="password" 
-            name="Password" 
+          <input
+            type="password"
+            name="Password"
             value={password}
-            onChange={handlePasswordChange}  
+            onChange={handlePasswordChange}
           />
         </div>
         <button type='submit'>login</button>

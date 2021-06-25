@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const BlogForm = ({createBlog}) => {
+const BlogForm = ({ createBlog }) => {
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -26,7 +26,7 @@ const BlogForm = ({createBlog}) => {
       url
     })
 
-    
+
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -38,29 +38,29 @@ const BlogForm = ({createBlog}) => {
       <form onSubmit={addBlog}>
         <div>
           title:
-          <input 
+          <input
             type="text"
             name='Title'
             value={title}
-            onChange={handleTitleChange} 
+            onChange={handleTitleChange}
           />
         </div>
         <div>
           author:
-          <input 
+          <input
             type="text"
             name='Author'
             value={author}
-            onChange={handleAuthorChange} 
+            onChange={handleAuthorChange}
           />
         </div>
         <div>
           url:
-          <input 
+          <input
             type="text"
             name='URL'
             value={url}
-            onChange={handleUrlChange} 
+            onChange={handleUrlChange}
           />
         </div>
         <button type='submit'>create</button>
