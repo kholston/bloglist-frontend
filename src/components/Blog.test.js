@@ -1,13 +1,12 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, fireEvent} from '@testing-library/react'
-import { prettyDOM } from '@testing-library/dom'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
   let component
-  const updateBlog = jest.fn()
-  const deleteBlog = jest.fn()
+  const updateBlogHandler = jest.fn()
+  const deleteBlogHandler = jest.fn()
   const showRemoveButton = true
 
   beforeEach(() => {
@@ -24,8 +23,8 @@ describe('<Blog />', () => {
     component = render(
       <Blog
         blog={blog}
-        updateBlog={updateBlog}
-        deleteBlog={deleteBlog}
+        updateBlog={updateBlogHandler}
+        deleteBlog={deleteBlogHandler}
         showRemoveButton={showRemoveButton}
       />
     )
@@ -50,6 +49,17 @@ describe('<Blog />', () => {
     fireEvent.click(viewButton)
 
     expect(blogInfo).not.toHaveStyle('display: none')
+  })
+
+  test('cliking the like button twice calls event handler twice', () => {
+    const viewButton = component.getByText('view')
+    fireEvent.click(viewButton)
+
+    const likeButton = component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(updateBlogHandler.mock.calls).toHaveLength(2)
   })
 
 })
