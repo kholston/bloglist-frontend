@@ -100,6 +100,7 @@ const App = () => {
       try {
         await blogService.remove(blogToDelete.id)
         setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
+        createNotification('Blog deleted successfully', 1)
       } catch (error) {
         createNotification(error.message, 2)
       }

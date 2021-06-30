@@ -3,12 +3,21 @@
 describe('Blog App', function(){
   beforeEach(function(){
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user  = {
-      username: 'testUser',
-      name: 'Test User',
-      password: 'userPassword'
-    }
-    cy.request('POST', 'http://localhost:3003/api/users', user)
+    const users  = [
+      {
+        username: 'testUser',
+        name: 'Test User',
+        password: 'userPassword'
+      },
+      {
+        username: 'testUser2',
+        name: 'Test User 2',
+        password: 'userPassword2'
+      }
+    ]
+    users.forEach(user => {
+      cy.request('POST', 'http://localhost:3003/api/users', user)
+    })
     cy.visit('http://localhost:3000')
   })
 
@@ -77,6 +86,35 @@ describe('Blog App', function(){
 
         cy.get('@info')
           .contains('likes 1')
+      })
+
+      it('one can be deleted', function(){
+        cy.contains('Blog 2')
+          .parent()
+          .contains('view')
+          .click()
+
+        cy.contains('www.example.com/2')
+          .parent()
+          .find('button')
+          .contains('remove')
+          .click()
+
+        cy.get('.success').should('contain', 'Blog deleted successfully')
+        cy.get('#bloglist').should('not.contain', 'Blog 2')
+      })
+
+      it('user can only delete own posts', function(){
+        cy.contains('logout').click()
+        cy.login({ username: 'testUser2', password: 'userPassword2' })
+        cy.contains('Blog 2')
+          .parent()
+          .contains('view')
+          .click()
+
+        cy.contains('www.example.com/2')
+          .parent()
+          .should('not.contain', 'remove')
       })
     })
 
