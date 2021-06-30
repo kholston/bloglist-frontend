@@ -113,7 +113,7 @@ const App = () => {
       <Notification message={notificationMessage} notificationType={notificationType} />
 
       {user === null ?
-        <Togglable buttonLabel={'log in'} ref={loginFormRef}>
+        <Togglable buttonLabel='log in' ref={loginFormRef}>
           <LoginForm handleLogin={handleLogin}/>
         </Togglable>
         :
