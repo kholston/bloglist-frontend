@@ -44,6 +44,7 @@ const BlogForm = ({ createBlog }) => {
             value={title}
             onChange={handleTitleChange}
             aria-label='title'
+            id='name'
           />
         </div>
         <div>
@@ -54,6 +55,7 @@ const BlogForm = ({ createBlog }) => {
             value={author}
             onChange={handleAuthorChange}
             aria-label='author'
+            id='author'
           />
         </div>
         <div>
@@ -64,9 +66,10 @@ const BlogForm = ({ createBlog }) => {
             value={url}
             onChange={handleUrlChange}
             aria-label='url'
+            id='url'
           />
         </div>
-        <button type='submit'>create</button>
+        <button id="blogSubmit" type='submit'>create</button>
       </form>
     </div>
   )
