@@ -54,5 +54,31 @@ describe('Blog App', function(){
       cy.get('.success').should('have.css', 'color', 'rgb(0, 128, 0)')
       cy.get('#bloglist').should('contain', 'Test Blog Title')
     })
+
+    describe('and several blogs exist', function(){
+      beforeEach(function(){
+        cy.createBlog({ title:'Blog 2', author: 'Blog Author 2', url: 'www.example.com/2' })
+        cy.createBlog({ title:'Blog 3', author: 'Blog Author 3', url: 'www.example.com/3' })
+        cy.createBlog({ title:'Blog 4', author: 'Blog Author 4', url: 'www.example.com/4' })
+      })
+
+      it('one of them can be liked', function(){
+        cy.contains('Blog 3')
+          .parent()
+          .contains('view')
+          .click()
+
+        cy.contains('www.example.com/3')
+          .parent()
+          .as('info')
+          .find('button')
+          .contains('like')
+          .click()
+
+        cy.get('@info')
+          .contains('likes 1')
+      })
+    })
+
   })
 })
